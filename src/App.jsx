@@ -16,87 +16,83 @@ export const goodsFromServer = [
 ];
 
 export const App = () => {
-  const [sortField, setSortField] = useState('');
-  const [selectedAlphabet, setselectedAlphabet] = useState('');
-  const [selectedLength, setselectedLength] = useState('');
-  const [reversed, setReversed] = useState('');
+  const [originalGoods] = useState(goodsFromServer);
+  const [goods, setGoods] = useState(goodsFromServer);
+  const [sortOrder, setSortOrder] = useState('');
+  const [reset, setReset] = useState(false);
+  const [reversed, setReversed] = useState(false);
 
-  const visibleGoods = goodsFromServer.sort((good1, good2) => {
-    switch (sortField) {
-      case ''
-    }
-  })
+  const sortAlphabetically = () => {
+    setSortOrder('alphabetically');
+    setGoods([...goods].sort());
+    setReversed(false);
+    setReset(true);
+  };
+
+  const sortByLength = () => {
+    setSortOrder('length');
+    setGoods([...goods].sort(/* ... */));
+    setReversed(false);
+    setReset(true);
+  };
+
+  const reverseOrder = () => {
+    setSortOrder(!reversed);
+    setGoods([...goods].reverse());
+    setReversed('');
+    setReset(true);
+  };
+
+  const resetOrder = () => {
+    setSortOrder('');
+    setGoods(originalGoods);
+    setReversed(false);
+    setReset(false);
+  };
 
   return (
     <div className="section content">
       <div className="buttons">
-        {goodsFromServer.map(field => (
+        <button
+          type="button"
+          className={`button is-info ${sortOrder === 'alphabetically' ? '' : 'is-light'}`}
+          onClick={sortAlphabetically}
+        >
+          Sort alphabetically
+        </button>
+
+        <button
+          type="button"
+          className={`button is-success ${sortOrder === 'length' ? '' : 'is-light'}`}
+          onClick={sortByLength}
+        >
+          Sort by length
+        </button>
+
+        <button
+          type="button"
+          className={`button is-warning ${sortOrder === 'reversed' ? '' : 'is-light'}`}
+          onClick={reverseOrder}
+        >
+          Reverse
+        </button>
+
+        {reset && (
           <button
-            key={field}
             type="button"
-            className="button is-info is-light"
-            onClick={() => setSortField(field)}
-          >
-            Sort alphabetically
-          </button>
-
-          <button type="button" className="button is-success is-light">
-            Sort by length
-          </button>
-
-          <button type="button" className="button is-warning is-light">
-            Reverse
-          </button>
-
-          <button
-            type="button"
-            className="button is-danger is-light"
-            onClick={() => setSortField('')}
+            className="button is-danger"
+            onClick={resetOrder}
           >
             Reset
           </button>
-        ))}
+        )}
       </div>
 
       <ul>
-        <li data-cy="Good">Dumplings</li>
-        <li data-cy="Good">Carrot</li>
-        <li data-cy="Good">Eggs</li>
-        <li data-cy="Good">Ice cream</li>
-        <li data-cy="Good">Apple</li>
-        <li data-cy="Good">...</li>
+        {goods.map(good => (
+          <li data-cy="Good">{good}</li>
+        ))}
       </ul>
     </div>
   );
 };
-
-// export const App = () => (
-//   <div className="section content">
-//     <div className="buttons">
-//       <button type="button" className="button is-info is-light">
-//         Sort alphabetically
-//       </button>
-
-//       <button type="button" className="button is-success is-light">
-//         Sort by length
-//       </button>
-
-//       <button type="button" className="button is-warning is-light">
-//         Reverse
-//       </button>
-
-//       <button type="button" className="button is-danger is-light">
-//         Reset
-//       </button>
-//     </div>
-
-//     <ul>
-//       <li data-cy="Good">Dumplings</li>
-//       <li data-cy="Good">Carrot</li>
-//       <li data-cy="Good">Eggs</li>
-//       <li data-cy="Good">Ice cream</li>
-//       <li data-cy="Good">Apple</li>
-//       <li data-cy="Good">...</li>
-//     </ul>
-//   </div>
-// );
